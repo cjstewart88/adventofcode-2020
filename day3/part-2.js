@@ -12,37 +12,31 @@ const readInterface = readline.createInterface({
   console: false
 });
 
+const map = [];
+
+readInterface
+  .on('line', (line) => map.push(line.repeat(75)))
+  .on('close', () => solve());
+
+
 const slopes = [[1,1], [3,1], [5,1], [7,1], [1,2]];
-const slopeTrees = [];
-for (let i = 0; i < slopes.length; i++) {
-  let index = slopes[i][0];
-  let numberOfTreesIncountered = 0;
-  let lineCounter = slopes[i][1];
-
-  readInterface
-    .on('line', (line) => {
-      if (lineCounter === slopes[i][1]) {
-        lineCounter += 1;
-        return;
-      }
-
-      while (line[index] === undefined) {
-        line += line
-      }
-
-      if (line[index] === '#') {
+let treesPerSlope = [];
+const solve = () => {
+  for (let i = 0; i < slopes.length; i++) {
+    let numberOfTreesIncountered = 0;
+    let x = 0;
+    let y = 0;
+    const spacesToMoveRight = slopes[i][0];
+    const spacesToMoveDown = slopes[i][1];
+    map.forEach(() => {
+      x += spacesToMoveRight;
+      y += spacesToMoveDown;
+      if (map[y] && map[y][x] === '#') {
         numberOfTreesIncountered += 1;
       }
-
-      index += slopes[i][0];
-      lineCounter += slopes[i][1];
-    })
-    .on('close', () => {
-      slopeTrees.push(numberOfTreesIncountered);
-      if (i === slopes.length-1) {
-        console.log('last slope tested!')
-        console.log(slopeTrees);
-        console.log(slopeTrees.reduce((a, b) => a * b))
-      }
     });
+    treesPerSlope.push(numberOfTreesIncountered)
+  }
+
+  console.log(treesPerSlope.reduce((a, b) => a * b))
 }
