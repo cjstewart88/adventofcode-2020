@@ -1,6 +1,3 @@
-// Works with the example input, but not with my actual input
-// im clearly missing something, but hanging up my hat on this one
-
 const readline = require('readline');
 const fs = require('fs');
 const path = require('path');
